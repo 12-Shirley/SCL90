@@ -1,10 +1,7 @@
-// tsconfig.json
 {
   "compilerOptions": {
-    // ... 其他配置，例如 "target", "lib", "jsx" 等保持不变
-    "baseUrl": ".", // <<< 确保这一行存在 >>>
+    "baseUrl": ".",
     "paths": {
-      // <<< 确保这一行存在 >>>
       "@/components/*": [
         "app/components/*"
       ],
@@ -15,9 +12,7 @@
         "hooks/*"
       ],
       "@/*": ["./*"]
-    }
-    // ... 其他配置
-    ,
+    },
     "target": "ES2017",
     "lib": [
       "dom",
