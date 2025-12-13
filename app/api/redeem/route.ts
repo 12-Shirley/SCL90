@@ -3,16 +3,17 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-// >>>>> 关键调试代码 <<<<<
-console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-console.log("Service Key Status:", !!process.env.SUPABASE_SERVICE_KEY); 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// 从环境变量中初始化 Supabase 客户端
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY! 
-);
+// 创建 Supabase 客户端的辅助函数
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,6 +25,9 @@ export async function POST(request: NextRequest) {
         message: '服务器配置错误，请联系管理员。' 
       }, { status: 500 });
     }
+
+    // 在函数内部初始化 Supabase 客户端（避免构建时错误）
+    const supabase = getSupabaseClient();
 
     const { code } = await request.json();
     if (!code) {
