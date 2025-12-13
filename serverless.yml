@@ -1,0 +1,41 @@
+component: nextjs
+name: scl90-assessment
+org: ''
+app: scl90
+stage: dev
+
+inputs:
+  src:
+    src: ./
+    dist: .next
+    hook: npm run build
+    exclude:
+      - .env*
+      - .git
+      - .gitignore
+      - node_modules
+      - README.md
+      - serverless-deploy.md
+      - backup
+  region: ap-guangzhou
+  runtime: Nodejs18.15
+  memorySize: 512
+  timeout: 30
+  environment:
+    variables:
+      NEXT_PUBLIC_SUPABASE_URL: ${env:NEXT_PUBLIC_SUPABASE_URL}
+      SUPABASE_SERVICE_KEY: ${env:SUPABASE_SERVICE_KEY}
+  apigw:
+    protocols:
+      - https
+    cors:
+      allowOrigins:
+        - '*'
+      allowMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowHeaders:
+        - '*'

@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env*
+node_modules
+.next
+README.md
+serverless-deploy.md
+backup
+*.log
+.DS_Store
