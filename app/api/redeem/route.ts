@@ -17,12 +17,26 @@ function getSupabaseClient() {
 
 export async function POST(request: NextRequest) {
   try {
-    // 检查环境变量
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+    // 检查环境变量（添加详细日志）
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+    
+    console.log('环境变量检查:');
+    console.log('NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? '已设置' : '未设置');
+    console.log('SUPABASE_SERVICE_KEY:', supabaseKey ? '已设置' : '未设置');
+    
+    if (!supabaseUrl || !supabaseKey) {
       console.error('Missing Supabase environment variables');
+      console.error('NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl);
+      console.error('SUPABASE_SERVICE_KEY:', supabaseKey ? '***已设置***' : '未设置');
+      
       return NextResponse.json({ 
         success: false, 
-        message: '服务器配置错误，请联系管理员。' 
+        message: '服务器配置错误，请联系管理员。',
+        debug: process.env.NODE_ENV === 'development' ? {
+          hasUrl: !!supabaseUrl,
+          hasKey: !!supabaseKey
+        } : undefined
       }, { status: 500 });
     }
 
